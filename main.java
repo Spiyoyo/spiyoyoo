@@ -1,0 +1,334 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class FarmingSystem {
+    private static ArrayList<FarmAnimal> animals = new ArrayList<>();
+    private static ArrayList<Crop> crops = new ArrayList<>();
+    private static ArrayList<Farmer> farmers = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean exit = false;
+
+        while (!exit) {
+            System.out.println("Farming System Menu:");
+            System.out.println("1. Add Animal");
+            System.out.println("2. Add Crop");
+            System.out.println("3. Add Farmer");
+            System.out.println("4. Display Animals");
+            System.out.println("5. Display Crops");
+            System.out.println("6. Display Farmers");
+            System.out.println("7. Perform Operations");
+            System.out.println("8. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    addAnimal(scanner);
+                    break;
+                case 2:
+                    addCrop(scanner);
+                    break;
+                case 3:
+                    addFarmer(scanner);
+                    break;
+                case 4:
+                    displayAnimals();
+                    break;
+                case 5:
+                    displayCrops();
+                    break;
+                case 6:
+                    displayFarmers();
+                    break;
+                case 7:
+                    performOperations(scanner);
+                    break;
+                case 8:
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private static void addAnimal(Scanner scanner) {
+        System.out.print("Enter animal type (Cow/Chicken): ");
+        String type = scanner.next();
+        System.out.print("Enter name: ");
+        String name = scanner.next();
+        System.out.print("Enter age: ");
+        int age = scanner.nextInt();
+
+        if (type.equalsIgnoreCase("Cow")) {
+            System.out.print("Enter milk production: ");
+            double milkProduction = scanner.nextDouble();
+            animals.add(new Cow(name, age, milkProduction));
+        } else if (type.equalsIgnoreCase("Chicken")) {
+            System.out.print("Enter egg production: ");
+            int eggProduction = scanner.nextInt();
+            animals.add(new Chicken(name, age, eggProduction));
+        } else {
+            System.out.println("Invalid animal type.");
+        }
+    }
+
+    private static void addCrop(Scanner scanner) {
+        System.out.print("Enter crop name: ");
+        String name = scanner.next();
+        System.out.print("Enter quantity: ");
+        int quantity = scanner.nextInt();
+        System.out.print("Enter price per unit: ");
+        double pricePerUnit = scanner.nextDouble();
+        crops.add(new Crop(name, quantity, pricePerUnit));
+    }
+
+    private static void addFarmer(Scanner scanner) {
+        System.out.print("Enter farmer name: ");
+        String name = scanner.next();
+        System.out.print("Enter experience level: ");
+        int experienceLevel = scanner.nextInt();
+        farmers.add(new Farmer(name, experienceLevel));
+    }
+
+    private static void displayAnimals() {
+        for (FarmAnimal animal : animals) {
+            System.out.println(animal.getType() + ": " + animal.getName() + ", Age: " + animal.getAge());
+        }
+    }
+
+    private static void displayCrops() {
+        for (Crop crop : crops) {
+            System.out.println("Crop: " + crop.getName() + ", Quantity: " + crop.getQuantity() + ", Price per unit: " + crop.getPricePerUnit());
+        }
+    }
+
+    private static void displayFarmers() {
+        for (Farmer farmer : farmers) {
+            System.out.println("Farmer: " + farmer.getName() + ", Experience Level: " + farmer.getExperienceLevel());
+        }
+    }
+
+    private static void performOperations(Scanner scanner) {
+        System.out.println("1. Make Animal Sound");
+        System.out.println("2. Produce Milk (Cow)");
+        System.out.println("3. Lay Eggs (Chicken)");
+        System.out.println("4. Harvest Crops");
+        System.out.println("5. Tend to Animals (Farmer)");
+        System.out.println("6. Plant Crops (Farmer)");
+        System.out.print("Choose an operation: ");
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                for (FarmAnimal animal : animals) {
+                    animal.makeSound();
+                }
+                break;
+            case 2:
+                for (FarmAnimal animal : animals) {
+                    if (animal instanceof Cow) {
+                        ((Cow) animal).produceMilk();
+                    }
+                }
+                break;
+            case 3:
+                for (FarmAnimal animal : animals) {
+                    if (animal instanceof Chicken) {
+                        ((Chicken) animal).layEggs();
+                    }
+                }
+                break;
+            case 4:
+                for (Crop crop : crops) {
+                    crop.harvest();
+                }
+                break;
+            case 5:
+                for (Farmer farmer : farmers) {
+                    farmer.tendToAnimals();
+                }
+                break;
+            case 6:
+                for (Farmer farmer : farmers) {
+                    farmer.plantCrops();
+                }
+                break;
+            default:
+                System.out.println("Invalid operation.");
+        }
+    }
+
+    // FarmAnimal Class
+    public static class FarmAnimal {
+        private String name;
+        private int age;
+        private String type;
+
+        public FarmAnimal(String name, int age, String type) {
+            this.name = name;
+            this.age = age;
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getAge() {
+            return age;
+        }
+
+        public void setAge(int age) {
+            this.age = age;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void makeSound() {
+            System.out.println("Animal sound");
+        }
+    }
+
+    // Cow Class
+    public static class Cow extends FarmAnimal {
+        private double milkProduction;
+
+        public Cow(String name, int age, double milkProduction) {
+            super(name, age, "Cow");
+            this.milkProduction = milkProduction;
+        }
+
+        public double getMilkProduction() {
+            return milkProduction;
+        }
+
+        public void setMilkProduction(double milkProduction) {
+            this.milkProduction = milkProduction;
+        }
+
+        @Override
+        public void makeSound() {
+            System.out.println("Moo");
+        }
+
+        public void produceMilk() {
+            System.out.println(getName() + " produced " + milkProduction + " liters of milk.");
+        }
+    }
+
+    // Chicken Class
+    public static class Chicken extends FarmAnimal {
+        private int eggProduction;
+
+        public Chicken(String name, int age, int eggProduction) {
+            super(name, age, "Chicken");
+            this.eggProduction = eggProduction;
+        }
+
+        public int getEggProduction() {
+            return eggProduction;
+        }
+
+        public void setEggProduction(int eggProduction) {
+            this.eggProduction = eggProduction;
+        }
+
+        @Override
+        public void makeSound() {
+            System.out.println("Cluck");
+        }
+
+        public void layEggs() {
+            System.out.println(getName() + " laid " + eggProduction + " eggs.");
+        }
+    }
+
+    // Crop Class
+    public static class Crop {
+        private String name;
+        private int quantity;
+        private double pricePerUnit;
+
+        public Crop(String name, int quantity, double pricePerUnit) {
+            this.name = name;
+            this.quantity = quantity;
+            this.pricePerUnit = pricePerUnit;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(int quantity) {
+            this.quantity = quantity;
+        }
+
+        public double getPricePerUnit() {
+            return pricePerUnit;
+        }
+
+        public void setPricePerUnit(double pricePerUnit) {
+            this.pricePerUnit = pricePerUnit;
+        }
+
+        public void harvest() {
+            System.out.println(quantity + " units of " + name + " harvested.");
+        }
+    }
+
+    // Farmer Class
+    public static class Farmer {
+        private String name;
+        private int experienceLevel;
+
+        public Farmer(String name, int experienceLevel) {
+            this.name = name;
+            this.experienceLevel = experienceLevel;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getExperienceLevel() {
+            return experienceLevel;
+        }
+
+        public void setExperienceLevel(int experienceLevel) {
+            this.experienceLevel = experienceLevel;
+        }
+
+        public void tendToAnimals() {
+            System.out.println(name + " is tending to the animals.");
+        }
+
+        public void plantCrops() {
+            System.out.println(name + " is planting crops.");
+        }
+    }
+}
